@@ -42,19 +42,18 @@ def score(s,DNA):
             Max = C[i]
             Consensus[i]='C'
         ConsensusVal[i] = Max
-    print("A : ",A)
-    print("T : ",T)
-    print("G : ",G)
-    print("C : ",C)
-    print("Consensus : ",Consensus)
-    print("ConsensusVal : ",ConsensusVal)
+    #print("A : ",A)
+    #print("T : ",T)
+    #print("G : ",G)
+    #print("C : ",C)
+    #print("Consensus : ",Consensus)
+    #print("ConsensusVal : ",ConsensusVal)
     print("Consensus Score : ",sum(ConsensusVal))
     return DNACut,A,T,G,C
 #=============================
 
-s=[1,1,1]
-fo = open('brca1-human.fasta')
-fo.readline()
+s=[1,1,1,1]
+fo = open('test.fasta')
 DNA=[]
 for row in fo:
     DNA.append(row.replace('\n',''))
