@@ -74,7 +74,7 @@ def partialScore(s,i,DNA,l,t):
             Max = C[k]
         ConsensusVal[k] = Max
     ResultScore = sum(ConsensusVal)+(t-i)*l
-    print("Partial Score : ",sum(ConsensusVal))
+    #print("Partial Score : ",sum(ConsensusVal))
     return ResultScore
 
 def nextLeaf(a,L,k):
@@ -92,6 +92,7 @@ def nextVertex(a,i,L,k):
     a=[0]+a
     if i<L:
         a[i]+1
+        a.pop(0)
         return (a,i+1)
     else:
         for j in range(L,0,-1):
@@ -113,29 +114,32 @@ def byPass(a,i,L,k):
     return (a,0)
 
 def branchAndBoundMotifSearch(DNA,t,n,l):
-    s = [1,1,1,1]
+    s = [1]*t
     BestScore = 0
     i = 1
     while (i > 0):
         if (i < t):
             OptimisticScore = partialScore(s,i,DNA,l,t)
             if (OptimisticScore < BestScore):
-                (s,i) = byPass(s,i,t,(n - l + 1)))
+                (s,i) = byPass(s,i,t,(n - l + 1))
             else:
-                (s,i) = nextVertex(s,i,t,(n - l + 1)))
+                (s,i) = nextVertex(s,i,t,(n - l + 1))
         else:
             if (score(s,DNA,l) > BestScore):
                 BestScore = score(s,DNA,l)
                 BestMotif = s
-            (s,i) = nextVertex(s,i,t,(n - l + 1)))
+            (s,i) = nextVertex(s,i,t,(n - l + 1))
+        #print(s,i)
+    print(BestScore)
     return BestMotif
 #============================= 
     
-s0 = [1,1,11,11]
-s1 = [1]
-l = 8
-t = 4
-fo = open('test.fasta')
+#s0 = [1,1,11,11]
+#s1 = [1]
+n = 60
+l = 10
+t = 5
+fo = open('test2.fasta')
 DNA=[]
 for row in fo:
     DNA.append(row.replace('\n',''))
@@ -144,5 +148,7 @@ fo.close()
 #print("nextLeaf: ",nextLeaf([1,1,1,2],4,2))
 #print("nextVertex: ",nextVertex([1,1,1,2],4,4,2))
 #print("byPass: ",byPass([1,2,2,2],3,4,2))
-print("Full Score : ",score(s0,DNA,l))
-print("Optimistic Score : ",partialScore(s0,1,DNA,l,t))
+#print("Full Score : ",score(s0,DNA,l))
+#print("Optimistic Score : ",partialScore(s0,1,DNA,l,t))
+
+print(branchAndBoundMotifSearch(DNA,t,n,l))
