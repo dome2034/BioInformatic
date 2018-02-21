@@ -136,23 +136,42 @@ def branchAndBoundMotifSearch(DNA,t,n,l):
         countLoop += 1
     print(BestScore)
     return BestMotif
+
+def scoreT(s,DNA,l):
+    iSeq=0
+    DNACut=[]
+    A=[0]*l
+    T=[0]*l
+    G=[0]*l
+    C=[0]*l
+    for iS in range(0,len(s)):
+        DNACut.append(list(DNA[iSeq][(s[iS]-1):((s[iS]-1)+l)]))
+        iSeq += 1
+    print(DNACut[0])
+    print(DNACut[1])
+    print(DNACut[2])
+    print(DNACut[3])
+    
+    ResultScore = 1
+    return ResultScore
 #============================= 
     
-#s0 = [1,1,11,11]
+s0 = [1,1,11,11]
+l = 8
 #s1 = [1]
-n = 60
-l = 10
-t = 5
-fo = open('test2.fasta')
+#n = 60
+#l = 10
+#t = 5
+fo = open('test.fasta')
 DNA=[]
 for row in fo:
     DNA.append(row.replace('\n',''))
 fo.close()
 
 #print("nextLeaf: ",nextLeaf([1,1,1,2],4,2))
-print("nextVertex: ",nextVertex([1,1,1,1,1],1,5,51))
+#print("nextVertex: ",nextVertex([1,1,1,1,1],1,5,51))
 #print("byPass: ",byPass([1,2,2,2],3,4,2))
-#print("Full Score : ",score(s0,DNA,l))
+print("Full Score : ",scoreT(s0,DNA,l))
 #print("Optimistic Score : ",partialScore(s0,1,DNA,l,t))
 
 #print(branchAndBoundMotifSearch(DNA,t,n,l))
