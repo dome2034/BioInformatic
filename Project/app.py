@@ -114,6 +114,7 @@ def byPass(a,i,L,k):
     return (a,0)
 
 def branchAndBoundMotifSearch(DNA,t,n,l):
+    countLoop = 0
     s = [1]*t
     BestScore = 0
     i = 1
@@ -121,15 +122,18 @@ def branchAndBoundMotifSearch(DNA,t,n,l):
         if (i < t):
             OptimisticScore = partialScore(s,i,DNA,l,t)
             if (OptimisticScore < BestScore):
-                (s,i) = byPass(s,i,t,(n - l + 1))
+                s,i = byPass(s,i,t,(n - l + 1))
+                print(countLoop,OptimisticScore,BestScore,(s,i),"by")
             else:
-                (s,i) = nextVertex(s,i,t,(n - l + 1))
+                s,i = nextVertex(s,i,t,(n - l + 1))
+                print(countLoop,OptimisticScore,BestScore,(s,i),"next1")
         else:
             if (score(s,DNA,l) > BestScore):
                 BestScore = score(s,DNA,l)
                 BestMotif = s
-            (s,i) = nextVertex(s,i,t,(n - l + 1))
-        #print(s,i)
+            s,i = nextVertex(s,i,t,(n - l + 1))
+            print(countLoop,OptimisticScore,BestScore,(s,i),"next2")
+        countLoop += 1
     print(BestScore)
     return BestMotif
 #============================= 
@@ -146,9 +150,9 @@ for row in fo:
 fo.close()
 
 #print("nextLeaf: ",nextLeaf([1,1,1,2],4,2))
-#print("nextVertex: ",nextVertex([1,1,1,2],4,4,2))
+print("nextVertex: ",nextVertex([1,1,1,1,1],1,5,51))
 #print("byPass: ",byPass([1,2,2,2],3,4,2))
 #print("Full Score : ",score(s0,DNA,l))
 #print("Optimistic Score : ",partialScore(s0,1,DNA,l,t))
 
-print(branchAndBoundMotifSearch(DNA,t,n,l))
+#print(branchAndBoundMotifSearch(DNA,t,n,l))
