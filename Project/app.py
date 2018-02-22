@@ -110,33 +110,33 @@ def byPass(a,i,L,k):
 def branchAndBoundMotifSearch(DNA,t,n,l):
     countLoop = 0
     s = [0]*t
+    scoreNow = 0
     BestScore = 0
+    BestMotif = [0]*t
     i = 1
     while (i > 0):
         if (i < t):
             OptimisticScore = partialScore(s,i,DNA,l)+(t-i)*l
             if (OptimisticScore < BestScore):
                 s,i = byPass(s,i,t,(n - l + 1))
-                print(countLoop+1,OptimisticScore,BestScore,(s,i),"by")
             else:
                 s,i = nextVertex(s,i,t,(n - l + 1))
-                print(countLoop+1,OptimisticScore,BestScore,(s,i),"next1")
         else:
-            if (score(s,DNA,l) > BestScore):
-                BestScore = score(s,DNA,l)
-                BestMotif = s
+            scoreNow = score(s,DNA,l)
+            if (scoreNow > BestScore):
+                BestScore = scoreNow
+                BestMotif = s.copy()
             s,i = nextVertex(s,i,t,(n - l + 1))
-            print(countLoop+1,OptimisticScore,BestScore,(s,i),"next2")
         countLoop += 1
-    print(BestScore)
-    return BestMotif
+        #if (countLoop%10000 == 0):
+            #print(countLoop+1,"score :",scoreNow,"best score :",BestScore,s,"best :",BestMotif)
+    ResultBestMotif = [x+1 for x in BestMotif]
+    print("=== run finish ===")
+    print(countLoop,BestScore)
+    return ResultBestMotif
 
 #============================= 
     
-#s0 = [1,1,11,11]
-#n = 28
-#l = 8
-#t = 4
 n = 60
 l = 10
 t = 5
@@ -145,11 +145,5 @@ DNA=[]
 for row in fo:
     DNA.append(row.replace('\n',''))
 fo.close()
-
-#print("nextLeaf: ",nextLeaf([1,1,1,2],4,2))
-#print("nextVertex: ",nextVertex([1,1,1,1,1],1,5,51))
-#print("byPass: ",byPass([1,2,2,2],3,4,2))
-#print("Full Score : ",score(s0,DNA,l))
-#print("Optimistic Score : ",partialScore(s0,1,DNA,l,t))
 
 print(branchAndBoundMotifSearch(DNA,t,n,l))
