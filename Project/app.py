@@ -128,11 +128,11 @@ def branchAndBoundMotifSearch(DNA,t,n,l):
                 BestMotif = s.copy()
             s,i = nextVertex(s,i,t,(n - l + 1))
         countLoop += 1
-        if (countLoop%10000 == 0):
-            print(countLoop+1,"score :",scoreNow,"best score :",BestScore,s,"best :",BestMotif)
+        #if (countLoop%10000 == 0):
+            #print(countLoop+1,"score :",scoreNow,"best score :",BestScore,s,"best :",BestMotif)
     Consensus = score(BestMotif,DNA,l)[1]
     ResultBestMotif = [x+1 for x in BestMotif]
-    print("=== run finish ===")
+    #print("=== run finish ===")
     return countLoop,ResultBestMotif,BestScore,Consensus
 
 #============================= 
