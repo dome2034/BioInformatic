@@ -37,7 +37,7 @@ def score(s,DNA,l):
                     MaxCharVal[j] = cC
                     MaxChar[j] = 'C'
     ResultScore = sum(MaxCharVal)
-    return ResultScore
+    return ResultScore,MaxChar
 
 def partialScore(s,i,DNA,l):
     iSeq=0
@@ -76,7 +76,7 @@ def partialScore(s,i,DNA,l):
                     MaxCharVal[j] = cC
                     MaxChar[j] = 'C'
     ResultScore = sum(MaxCharVal)
-    return ResultScore
+    return ResultScore,MaxChar
 
 def nextLeaf(a,L,k):
     a=[0]+a
@@ -116,24 +116,24 @@ def branchAndBoundMotifSearch(DNA,t,n,l):
     i = 1
     while (i > 0):
         if (i < t):
-            OptimisticScore = partialScore(s,i,DNA,l)+(t-i)*l
+            OptimisticScore = partialScore(s,i,DNA,l)[0]+(t-i)*l
             if (OptimisticScore < BestScore):
                 s,i = byPass(s,i,t,(n - l + 1))
             else:
                 s,i = nextVertex(s,i,t,(n - l + 1))
         else:
-            scoreNow = score(s,DNA,l)
+            scoreNow = score(s,DNA,l)[0]
             if (scoreNow > BestScore):
                 BestScore = scoreNow
                 BestMotif = s.copy()
             s,i = nextVertex(s,i,t,(n - l + 1))
         countLoop += 1
-        #if (countLoop%10000 == 0):
-            #print(countLoop+1,"score :",scoreNow,"best score :",BestScore,s,"best :",BestMotif)
+        if (countLoop%10000 == 0):
+            print(countLoop+1,"score :",scoreNow,"best score :",BestScore,s,"best :",BestMotif)
+    Consensus = score(BestMotif,DNA,l)[1]
     ResultBestMotif = [x+1 for x in BestMotif]
     print("=== run finish ===")
-    print(countLoop,BestScore)
-    return ResultBestMotif
+    return countLoop,ResultBestMotif,BestScore,Consensus
 
 #============================= 
     
@@ -146,4 +146,9 @@ for row in fo:
     DNA.append(row.replace('\n',''))
 fo.close()
 
-print(branchAndBoundMotifSearch(DNA,t,n,l))
+countLoop,ResultBestMotif,BestScore,Consensus = branchAndBoundMotifSearch(DNA,t,n,l)
+
+print("Loop :",countLoop)
+print("BestMotif :",ResultBestMotif)
+print("BestScore :",BestScore)
+print("Consensus",Consensus)
