@@ -1,80 +1,81 @@
 
 # Function definition is here
 def score(s,DNA,l):
-    iDNA=0
+    iSeq=0
     DNACut=[]
-    A=[0]*l
-    T=[0]*l
-    G=[0]*l
-    C=[0]*l
-    for row in range(0,len(s)):
-        DNACut.append(DNA[iDNA][(s[row]-1):((s[row]-1)+l)])
-        DNACutCal=(DNA[iDNA][(s[row]-1):((s[row]-1)+l)])
-        iDNA+=1
-        j=0
-        for DNAChar in DNACutCal:            
-            if (DNAChar == 'A'):
-                A[j]+=1
-            elif (DNAChar == 'T'):
-                T[j]+=1
-            elif (DNAChar == 'G'):
-                G[j]+=1
+    MaxChar=['A']*l
+    MaxCharVal=[0]*l
+    for iS in range(0,len(s)):
+        DNACut.append(list(DNA[iSeq][(s[iS]):((s[iS])+l)]))
+        iSeq += 1
+    #-- cal score
+    for j in range(0,l):
+        cA = 0
+        cT = 0
+        cG = 0
+        cC = 0
+        for k in range(0,len(DNACut)):
+            #-- count char
+            if (DNACut[k][j] == 'A'):
+                cA += 1
+                if (cA > MaxCharVal[j]):
+                    MaxCharVal[j] = cA
+                    MaxChar[j] = 'A'
+            elif (DNACut[k][j] == 'T'):
+                cT += 1
+                if (cT > MaxCharVal[j]):
+                    MaxCharVal[j] = cT
+                    MaxChar[j] = 'T'
+            elif (DNACut[k][j] == 'G'):
+                cG += 1
+                if (cG > MaxCharVal[j]):
+                    MaxCharVal[j] = cG
+                    MaxChar[j] = 'G'
             else:
-                C[j]+=1
-            j+=1
-            
-    ConsensusVal=[0]*l
-    for k in range(l):
-        Max = 0
-        if(A[k] > Max):
-            Max = A[k]
-        if(T[k] > Max):
-            Max = T[k]
-        if(G[k] > Max):
-            Max = G[k]
-        if(C[k] > Max):
-            Max = C[k]
-        ConsensusVal[k] = Max
-    ResultScore = sum(ConsensusVal)
+                cC += 1
+                if (cC > MaxCharVal[j]):
+                    MaxCharVal[j] = cC
+                    MaxChar[j] = 'C'
+    ResultScore = sum(MaxCharVal)
     return ResultScore
 
-def partialScore(s,i,DNA,l,t):
-    iDNA=0
+def partialScore(s,i,DNA,l):
+    iSeq=0
     DNACut=[]
-    A=[0]*l
-    T=[0]*l
-    G=[0]*l
-    C=[0]*l
-    for row in range(0,i):
-        DNACut.append(DNA[iDNA][(s[row]-1):((s[row]-1)+l)])
-        DNACutCal=(DNA[iDNA][(s[row]-1):((s[row]-1)+l)])
-        iDNA+=1
-        j=0
-        for DNAChar in DNACutCal:            
-            if (DNAChar == 'A'):
-                A[j]+=1
-            elif (DNAChar == 'T'):
-                T[j]+=1
-            elif (DNAChar == 'G'):
-                G[j]+=1
+    MaxChar=['A']*l
+    MaxCharVal=[0]*l
+    for iS in range(0,i):
+        DNACut.append(list(DNA[iSeq][(s[iS]):((s[iS])+l)]))
+        iSeq += 1
+    #-- cal score
+    for j in range(0,l):
+        cA = 0
+        cT = 0
+        cG = 0
+        cC = 0
+        for k in range(0,len(DNACut)):
+            #-- count char
+            if (DNACut[k][j] == 'A'):
+                cA += 1
+                if (cA > MaxCharVal[j]):
+                    MaxCharVal[j] = cA
+                    MaxChar[j] = 'A'
+            elif (DNACut[k][j] == 'T'):
+                cT += 1
+                if (cT > MaxCharVal[j]):
+                    MaxCharVal[j] = cT
+                    MaxChar[j] = 'T'
+            elif (DNACut[k][j] == 'G'):
+                cG += 1
+                if (cG > MaxCharVal[j]):
+                    MaxCharVal[j] = cG
+                    MaxChar[j] = 'G'
             else:
-                C[j]+=1
-            j+=1
-            
-    ConsensusVal=[0]*l
-    for k in range(l):
-        Max = 0
-        if(A[k] > Max):
-            Max = A[k]
-        if(T[k] > Max):
-            Max = T[k]
-        if(G[k] > Max):
-            Max = G[k]
-        if(C[k] > Max):
-            Max = C[k]
-        ConsensusVal[k] = Max
-    ResultScore = sum(ConsensusVal)+(t-i)*l
-    #print("Partial Score : ",sum(ConsensusVal))
+                cC += 1
+                if (cC > MaxCharVal[j]):
+                    MaxCharVal[j] = cC
+                    MaxChar[j] = 'C'
+    ResultScore = sum(MaxCharVal)
     return ResultScore
 
 def nextLeaf(a,L,k):
@@ -89,80 +90,57 @@ def nextLeaf(a,L,k):
     return a
     
 def nextVertex(a,i,L,k):
-    a=[0]+a
     if i<L:
-        a[i]+1
-        a.pop(0)
+        a[i] = 0
         return (a,i+1)
     else:
         for j in range(L,0,-1):
-            if a[j] < k:
-                a[j]=a[j]+1
-                a.pop(0)
+            if a[j - 1] < k - 1:
+                a[j - 1] = a[j - 1] + 1
                 return (a,j)
-    a.pop(0)
     return (a,0)
 
 def byPass(a,i,L,k):
-    a=[0]+a
     for j in range(i,0,-1):
-        if a[j] < k:
-            a[j] = a[j] +1
-            a.pop(0)
+        if a[j - 1] < k - 1:
+            a[j - 1] = a[j - 1] + 1
             return (a,j)
-    a.pop(0)
     return (a,0)
 
 def branchAndBoundMotifSearch(DNA,t,n,l):
     countLoop = 0
-    s = [1]*t
+    s = [0]*t
     BestScore = 0
     i = 1
     while (i > 0):
         if (i < t):
-            OptimisticScore = partialScore(s,i,DNA,l,t)
+            OptimisticScore = partialScore(s,i,DNA,l)+(t-i)*l
             if (OptimisticScore < BestScore):
                 s,i = byPass(s,i,t,(n - l + 1))
-                print(countLoop,OptimisticScore,BestScore,(s,i),"by")
+                print(countLoop+1,OptimisticScore,BestScore,(s,i),"by")
             else:
                 s,i = nextVertex(s,i,t,(n - l + 1))
-                print(countLoop,OptimisticScore,BestScore,(s,i),"next1")
+                print(countLoop+1,OptimisticScore,BestScore,(s,i),"next1")
         else:
             if (score(s,DNA,l) > BestScore):
                 BestScore = score(s,DNA,l)
                 BestMotif = s
             s,i = nextVertex(s,i,t,(n - l + 1))
-            print(countLoop,OptimisticScore,BestScore,(s,i),"next2")
+            print(countLoop+1,OptimisticScore,BestScore,(s,i),"next2")
         countLoop += 1
     print(BestScore)
     return BestMotif
 
-def scoreT(s,DNA,l):
-    iSeq=0
-    DNACut=[]
-    A=[0]*l
-    T=[0]*l
-    G=[0]*l
-    C=[0]*l
-    for iS in range(0,len(s)):
-        DNACut.append(list(DNA[iSeq][(s[iS]-1):((s[iS]-1)+l)]))
-        iSeq += 1
-    print(DNACut[0])
-    print(DNACut[1])
-    print(DNACut[2])
-    print(DNACut[3])
-    
-    ResultScore = 1
-    return ResultScore
 #============================= 
     
-s0 = [1,1,11,11]
-l = 8
-#s1 = [1]
-#n = 60
-#l = 10
-#t = 5
-fo = open('test.fasta')
+#s0 = [1,1,11,11]
+#n = 28
+#l = 8
+#t = 4
+n = 60
+l = 10
+t = 5
+fo = open('test2.fasta')
 DNA=[]
 for row in fo:
     DNA.append(row.replace('\n',''))
@@ -171,7 +149,7 @@ fo.close()
 #print("nextLeaf: ",nextLeaf([1,1,1,2],4,2))
 #print("nextVertex: ",nextVertex([1,1,1,1,1],1,5,51))
 #print("byPass: ",byPass([1,2,2,2],3,4,2))
-print("Full Score : ",scoreT(s0,DNA,l))
+#print("Full Score : ",score(s0,DNA,l))
 #print("Optimistic Score : ",partialScore(s0,1,DNA,l,t))
 
-#print(branchAndBoundMotifSearch(DNA,t,n,l))
+print(branchAndBoundMotifSearch(DNA,t,n,l))
