@@ -152,7 +152,6 @@ def greedyMotifSearch(DNA,t,n,l):
                 BestMotif[i] = s[i]
             countLoop += 1
         s[i] = BestMotif[i]
-    #print(countLoop)
     BestScore = score(BestMotif,DNA,l)[0]
     Consensus = score(BestMotif,DNA,l)[1]
     ResultBestMotif = [x+1 for x in BestMotif]   
@@ -183,7 +182,7 @@ def main(argv):
                 print("error: Motif finding type must be B or G only.\n")
                 exit()
             os.system('cls')
-            print("Loop :",countLoop)
+            print("Number of visiting nodes :",countLoop)
             print("BestMotif :",ResultBestMotif)
             print("BestScore :",BestScore)
             print("Consensus",Consensus)    
@@ -191,7 +190,9 @@ def main(argv):
             print("error: file",FileName,"not found!\n")
             exit()
     else:
+        
         print("usage: python a1-motif-600632014.py [fasta inputfile] [type of motif finding] [length of sequence].\nPlease, Try again.\n")
 
 if __name__ == "__main__":
 	main(sys.argv)
+
